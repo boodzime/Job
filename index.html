@@ -16,6 +16,7 @@
                 <div class="logo">💼 JobNexus</div>
                 <ul class="nav-menu">
                     <li><a href="#jobs">Oferty Pracy</a></li>
+                    <li><a href="#services">Usługi i Zlecenia</a></li>
                     <li><a href="#favorites">Ulubione</a></li>
                     <li><a href="#stats">Statystyki</a></li>
                 </ul>
@@ -27,7 +28,7 @@
             <!-- Search Section -->
             <section id="search" class="search-section">
                 <h1>Znajdź Swoją Następną Pracę</h1>
-                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 2rem;">Przejrzyj tysiące ofert pracy z najlepszymi firmami</p>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 2rem;">Przejrzyj tysiące ofert pracy i usług z najlepszymi firmami</p>
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Szukaj pozycji, firmy, lokalizacji..." class="search-input">
                     <button id="searchBtn" class="search-btn">🔍 Szukaj</button>
@@ -72,8 +73,8 @@
 
             <!-- Jobs Section - Single Column Layout -->
             <section id="jobs" class="jobs-section">
-                <div class="jobs-header">
-                    <h2>📋 Dostępne Oferty Pracy</h2>
+                <div class="section-title-container">
+                    <h2 class="section-title">📋 Dostępne Oferty Pracy</h2>
                     <span id="jobsCount" class="jobs-count">Ładowanie...</span>
                 </div>
                 <div id="jobsList" class="jobs-list"></div>
@@ -91,6 +92,65 @@
                 <div id="paginationInfo" class="pagination-info">Strona <span id="currentPage">1</span> z <span id="totalPages">1</span></div>
             </section>
 
+            <!-- Services & Gigs Section -->
+            <section id="services" class="services-section">
+                <div class="section-title-container">
+                    <h2 class="section-title">🎯 Usługi i Zlecenia (Korepetycje, Porady, Konsultacje)</h2>
+                    <span id="servicesCount" class="services-count">Ładowanie...</span>
+                </div>
+
+                <!-- Services Filters -->
+                <div class="services-filters">
+                    <div class="filter-group">
+                        <label for="serviceTypeFilter">Typ usługi</label>
+                        <select id="serviceTypeFilter" class="filter-input">
+                            <option value="">Wszystkie usługi</option>
+                            <option value="korepetycje">Korepetycje</option>
+                            <option value="konsultacje">Konsultacje</option>
+                            <option value="porady">Porady Biznesowe</option>
+                            <option value="tłumaczenia">Tłumaczenia</option>
+                            <option value="grafika">Grafika i Design</option>
+                            <option value="pisanie">Pisanie i Content</option>
+                            <option value="programowanie">Programowanie</option>
+                            <option value="muzyka">Muzyka i Lekcje</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="serviceLocationFilter">Lokalizacja</label>
+                        <input type="text" id="serviceLocationFilter" placeholder="np. Online" class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <label for="priceSortFilter">Sortowanie</label>
+                        <select id="priceSortFilter" class="filter-input">
+                            <option value="latest">Najnowsze</option>
+                            <option value="price-asc">Cena: od najniższej</option>
+                            <option value="price-desc">Cena: od najwyższej</option>
+                            <option value="rating">Najwyżej oceniane</option>
+                        </select>
+                    </div>
+                    <button id="clearServicesFilters" class="btn-secondary">🔄 Wyczyść filtry</button>
+                </div>
+
+                <div id="loadingServicesSpinner" class="loading-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Ładowanie usług...</p>
+                </div>
+
+                <div id="servicesList" class="services-grid"></div>
+
+                <!-- Services Pagination -->
+                <div id="servicesPagination" class="pagination-container">
+                    <button id="servicesPrevBtn" class="pagination-btn" disabled>
+                        <span>← Poprzednia</span>
+                    </button>
+                    <div id="servicesPageNumbers" class="page-numbers"></div>
+                    <button id="servicesNextBtn" class="pagination-btn">
+                        <span>Następna →</span>
+                    </button>
+                </div>
+                <div id="servicesPaginationInfo" class="pagination-info">Strona <span id="servicesCurrentPage">1</span> z <span id="servicesTotal">1</span></div>
+            </section>
+
             <!-- Stats Section -->
             <section id="stats" class="stats-section">
                 <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2rem; color: #1e293b;">Statystyki Portalu</h2>
@@ -98,6 +158,10 @@
                     <div class="stat-item">
                         <span class="stat-number" id="totalJobsStat">0</span>
                         <span class="stat-label">Ofert Pracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalServicesStat">0</span>
+                        <span class="stat-label">Usług i Zleceń</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-number" id="totalCompaniesStat">0</span>

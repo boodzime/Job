@@ -1,20 +1,28 @@
 // Main Application Logic with Job Listings and Pagination
 
-import { loadJobs, displayJobs, setupFilters } from './services/jobService.js'
+import { loadJobs, displayJobs } from './services/jobService.js'
+import { loadServices, displayServices } from './services/servicesService.js'
 import { showNotification } from './services/notificationService.js'
 
 // Pagination settings
 const JOBS_PER_PAGE = 7
-let currentPage = 1
+const SERVICES_PER_PAGE = 10
+
+let currentJobPage = 1
+let currentServicePage = 1
+
 let allJobs = []
 let filteredJobs = []
+
+let allServices = []
+let filteredServices = []
 
 // Initialize application
 async function init() {
   try {
     showLoadingSpinner(true)
     
-    // Load jobs from API
+    // Load jobs
     allJobs = await loadJobs()
     filteredJobs = [...allJobs]
     
@@ -24,11 +32,17 @@ async function init() {
       showNotification(`Załadowano ${allJobs.length} ofert pracy!`, 'success')
     }
     
+    // Load services
+    allServices = await loadServices()
+    filteredServices = [...allServices]
+    showNotification(`Załadowano ${allServices.length} usług i zleceń!`, 'success')
+    
     // Update stats
     updateStats()
     
-    // Render initial page
-    renderCurrentPage()
+    // Render initial pages
+    renderJobsPage()
+    renderServicesPage()
     
     // Setup event listeners
     setupEventListeners()
@@ -43,27 +57,38 @@ async function init() {
 
 // Setup event listeners
 function setupEventListeners() {
-  // Search functionality
-  document.getElementById('searchBtn').addEventListener('click', performSearch)
+  // Search for jobs
+  document.getElementById('searchBtn').addEventListener('click', performJobSearch)
   document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') performSearch()
+    if (e.key === 'Enter') performJobSearch()
   })
   
-  // Filters
-  document.getElementById('categoryFilter').addEventListener('change', applyFilters)
-  document.getElementById('typeFilter').addEventListener('change', applyFilters)
-  document.getElementById('locationFilter').addEventListener('change', applyFilters)
-  document.getElementById('clearFilters').addEventListener('click', clearAllFilters)
+  // Job filters
+  document.getElementById('categoryFilter').addEventListener('change', applyJobFilters)
+  document.getElementById('typeFilter').addEventListener('change', applyJobFilters)
+  document.getElementById('locationFilter').addEventListener('change', applyJobFilters)
+  document.getElementById('clearFilters').addEventListener('click', clearAllJobFilters)
   
-  // Pagination
-  document.getElementById('prevBtn').addEventListener('click', previousPage)
-  document.getElementById('nextBtn').addEventListener('click', nextPage)
+  // Jobs pagination
+  document.getElementById('prevBtn').addEventListener('click', previousJobPage)
+  document.getElementById('nextBtn').addEventListener('click', nextJobPage)
+  
+  // Services filters
+  document.getElementById('serviceTypeFilter').addEventListener('change', applyServiceFilters)
+  document.getElementById('serviceLocationFilter').addEventListener('change', applyServiceFilters)
+  document.getElementById('priceSortFilter').addEventListener('change', applyServiceFilters)
+  document.getElementById('clearServicesFilters').addEventListener('click', clearAllServiceFilters)
+  
+  // Services pagination
+  document.getElementById('servicesPrevBtn').addEventListener('click', previousServicePage)
+  document.getElementById('servicesNextBtn').addEventListener('click', nextServicePage)
 }
 
-// Perform search
-function performSearch() {
+// ============== JOBS LOGIC ==============
+
+function performJobSearch() {
   const query = document.getElementById('searchInput').value.toLowerCase()
-  currentPage = 1
+  currentJobPage = 1
   
   if (!query) {
     filteredJobs = [...allJobs]
@@ -82,16 +107,15 @@ function performSearch() {
     showNotification(`Znaleziono ${filteredJobs.length} ofert`, 'success')
   }
   
-  renderCurrentPage()
+  renderJobsPage()
 }
 
-// Apply all filters
-function applyFilters() {
+function applyJobFilters() {
   const category = document.getElementById('categoryFilter').value
   const type = document.getElementById('typeFilter').value
   const location = document.getElementById('locationFilter').value.toLowerCase()
   
-  currentPage = 1
+  currentJobPage = 1
   filteredJobs = allJobs.filter(job => {
     const matchCategory = !category || (job.category && job.category.includes(category))
     const matchType = !type || job.type === type
@@ -99,51 +123,46 @@ function applyFilters() {
     return matchCategory && matchType && matchLocation
   })
   
-  renderCurrentPage()
+  renderJobsPage()
 }
 
-// Clear all filters
-function clearAllFilters() {
+function clearAllJobFilters() {
   document.getElementById('searchInput').value = ''
   document.getElementById('categoryFilter').value = ''
   document.getElementById('typeFilter').value = ''
   document.getElementById('locationFilter').value = ''
-  currentPage = 1
+  currentJobPage = 1
   filteredJobs = [...allJobs]
-  renderCurrentPage()
+  renderJobsPage()
   showNotification('Filtry wyczyszczone', 'info')
 }
 
-// Render current page
-function renderCurrentPage() {
-  const startIdx = (currentPage - 1) * JOBS_PER_PAGE
+function renderJobsPage() {
+  const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE
   const endIdx = startIdx + JOBS_PER_PAGE
   const pageJobs = filteredJobs.slice(startIdx, endIdx)
   
   displayJobs(pageJobs, '#jobsList')
-  updatePagination()
+  updateJobPagination()
   updateJobsCount()
 }
 
-// Update pagination controls
-function updatePagination() {
+function updateJobPagination() {
   const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
   
-  // Update page numbers display
   const pageNumbersDiv = document.getElementById('pageNumbers')
   pageNumbersDiv.innerHTML = ''
   
   const maxPagesToShow = 5
-  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2))
+  let startPage = Math.max(1, currentJobPage - Math.floor(maxPagesToShow / 2))
   let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
   
   if (endPage - startPage + 1 < maxPagesToShow) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1)
   }
   
-  // First page button
   if (startPage > 1) {
-    pageNumbersDiv.appendChild(createPageButton(1, '1'))
+    pageNumbersDiv.appendChild(createPageButton(1, '1', 'job'))
     if (startPage > 2) {
       const dots = document.createElement('span')
       dots.className = 'page-dots'
@@ -152,12 +171,10 @@ function updatePagination() {
     }
   }
   
-  // Page numbers
   for (let i = startPage; i <= endPage; i++) {
-    pageNumbersDiv.appendChild(createPageButton(i, i.toString()))
+    pageNumbersDiv.appendChild(createPageButton(i, i.toString(), 'job'))
   }
   
-  // Last page button
   if (endPage < totalPages) {
     if (endPage < totalPages - 1) {
       const dots = document.createElement('span')
@@ -165,75 +182,200 @@ function updatePagination() {
       dots.textContent = '...'
       pageNumbersDiv.appendChild(dots)
     }
-    pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages.toString()))
+    pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages.toString(), 'job'))
   }
   
-  // Update buttons
-  document.getElementById('prevBtn').disabled = currentPage === 1
-  document.getElementById('nextBtn').disabled = currentPage === totalPages
+  document.getElementById('prevBtn').disabled = currentJobPage === 1
+  document.getElementById('nextBtn').disabled = currentJobPage === totalPages
   
-  // Update page info
-  document.getElementById('currentPage').textContent = currentPage
+  document.getElementById('currentPage').textContent = currentJobPage
   document.getElementById('totalPages').textContent = totalPages
 }
 
-// Create page button
-function createPageButton(pageNum, text) {
+function createPageButton(pageNum, text, type = 'job') {
   const button = document.createElement('button')
-  button.className = `page-number ${pageNum === currentPage ? 'active' : ''}`
+  button.className = `page-number ${pageNum === (type === 'job' ? currentJobPage : currentServicePage) ? 'active' : ''}`
   button.textContent = text
-  button.addEventListener('click', () => goToPage(pageNum))
+  button.addEventListener('click', () => type === 'job' ? goToJobPage(pageNum) : goToServicePage(pageNum))
   return button
 }
 
-// Go to specific page
-function goToPage(pageNum) {
-  currentPage = pageNum
-  renderCurrentPage()
-  // Scroll to jobs section
+function goToJobPage(pageNum) {
+  currentJobPage = pageNum
+  renderJobsPage()
   document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })
 }
 
-// Previous page
-function previousPage() {
-  if (currentPage > 1) {
-    currentPage--
-    renderCurrentPage()
+function previousJobPage() {
+  if (currentJobPage > 1) {
+    currentJobPage--
+    renderJobsPage()
     document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })
   }
 }
 
-// Next page
-function nextPage() {
+function nextJobPage() {
   const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
-  if (currentPage < totalPages) {
-    currentPage++
-    renderCurrentPage()
+  if (currentJobPage < totalPages) {
+    currentJobPage++
+    renderJobsPage()
     document.getElementById('jobs').scrollIntoView({ behavior: 'smooth' })
   }
 }
 
-// Update jobs count display
 function updateJobsCount() {
   const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
-  const startIdx = (currentPage - 1) * JOBS_PER_PAGE + 1
-  const endIdx = Math.min(currentPage * JOBS_PER_PAGE, filteredJobs.length)
+  const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE + 1
+  const endIdx = Math.min(currentJobPage * JOBS_PER_PAGE, filteredJobs.length)
   
   document.getElementById('jobsCount').textContent = 
     `Wyświetlanie ${startIdx}-${endIdx} z ${filteredJobs.length} ofert`
 }
 
-// Update statistics
+// ============== SERVICES LOGIC ==============
+
+function applyServiceFilters() {
+  const type = document.getElementById('serviceTypeFilter').value
+  const location = document.getElementById('serviceLocationFilter').value.toLowerCase()
+  const sort = document.getElementById('priceSortFilter').value
+  
+  currentServicePage = 1
+  filteredServices = allServices.filter(service => {
+    const matchType = !type || service.type === type
+    const matchLocation = !location || service.location.toLowerCase().includes(location)
+    return matchType && matchLocation
+  })
+  
+  // Apply sorting
+  if (sort === 'price-asc') {
+    filteredServices.sort((a, b) => {
+      const priceA = parseInt(a.price) || 0
+      const priceB = parseInt(b.price) || 0
+      return priceA - priceB
+    })
+  } else if (sort === 'price-desc') {
+    filteredServices.sort((a, b) => {
+      const priceA = parseInt(a.price) || 0
+      const priceB = parseInt(b.price) || 0
+      return priceB - priceA
+    })
+  } else if (sort === 'rating') {
+    filteredServices.sort((a, b) => b.rating - a.rating)
+  }
+  
+  renderServicesPage()
+}
+
+function clearAllServiceFilters() {
+  document.getElementById('serviceTypeFilter').value = ''
+  document.getElementById('serviceLocationFilter').value = ''
+  document.getElementById('priceSortFilter').value = 'latest'
+  currentServicePage = 1
+  filteredServices = [...allServices]
+  renderServicesPage()
+  showNotification('Filtry usług wyczyszczone', 'info')
+}
+
+function renderServicesPage() {
+  const startIdx = (currentServicePage - 1) * SERVICES_PER_PAGE
+  const endIdx = startIdx + SERVICES_PER_PAGE
+  const pageServices = filteredServices.slice(startIdx, endIdx)
+  
+  displayServices(pageServices, '#servicesList')
+  updateServicePagination()
+  updateServicesCount()
+}
+
+function updateServicePagination() {
+  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE)
+  
+  const pageNumbersDiv = document.getElementById('servicesPageNumbers')
+  pageNumbersDiv.innerHTML = ''
+  
+  const maxPagesToShow = 5
+  let startPage = Math.max(1, currentServicePage - Math.floor(maxPagesToShow / 2))
+  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
+  
+  if (endPage - startPage + 1 < maxPagesToShow) {
+    startPage = Math.max(1, endPage - maxPagesToShow + 1)
+  }
+  
+  if (startPage > 1) {
+    pageNumbersDiv.appendChild(createPageButton(1, '1', 'service'))
+    if (startPage > 2) {
+      const dots = document.createElement('span')
+      dots.className = 'page-dots'
+      dots.textContent = '...'
+      pageNumbersDiv.appendChild(dots)
+    }
+  }
+  
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbersDiv.appendChild(createPageButton(i, i.toString(), 'service'))
+  }
+  
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const dots = document.createElement('span')
+      dots.className = 'page-dots'
+      dots.textContent = '...'
+      pageNumbersDiv.appendChild(dots)
+    }
+    pageNumbersDiv.appendChild(createPageButton(totalPages, totalPages.toString(), 'service'))
+  }
+  
+  document.getElementById('servicesPrevBtn').disabled = currentServicePage === 1
+  document.getElementById('servicesNextBtn').disabled = currentServicePage === totalPages
+  
+  document.getElementById('servicesCurrentPage').textContent = currentServicePage
+  document.getElementById('servicesTotal').textContent = totalPages
+}
+
+function goToServicePage(pageNum) {
+  currentServicePage = pageNum
+  renderServicesPage()
+  document.getElementById('services').scrollIntoView({ behavior: 'smooth' })
+}
+
+function previousServicePage() {
+  if (currentServicePage > 1) {
+    currentServicePage--
+    renderServicesPage()
+    document.getElementById('services').scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+function nextServicePage() {
+  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE)
+  if (currentServicePage < totalPages) {
+    currentServicePage++
+    renderServicesPage()
+    document.getElementById('services').scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+function updateServicesCount() {
+  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE)
+  const startIdx = (currentServicePage - 1) * SERVICES_PER_PAGE + 1
+  const endIdx = Math.min(currentServicePage * SERVICES_PER_PAGE, filteredServices.length)
+  
+  document.getElementById('servicesCount').textContent = 
+    `Wyświetlanie ${startIdx}-${endIdx} z ${filteredServices.length} usług`
+}
+
+// ============== STATS & COMMON ==============
+
 function updateStats() {
   const uniqueCompanies = new Set(allJobs.map(job => job.company)).size
   
   document.getElementById('totalJobsStat').textContent = allJobs.length
+  document.getElementById('totalServicesStat').textContent = allServices.length
   document.getElementById('totalCompaniesStat').textContent = uniqueCompanies
 }
 
-// Show/hide loading spinner
 function showLoadingSpinner(show) {
   document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none'
+  document.getElementById('loadingServicesSpinner').style.display = show ? 'flex' : 'none'
 }
 
 // Start the application
