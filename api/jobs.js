@@ -1,4 +1,4 @@
-export default async function handler(request, response) {
+async function handler(request, response) {
   if (request.method !== 'GET') {
     response.setHeader('Allow', 'GET')
     return response.status(405).json({ error: 'Method Not Allowed' })
@@ -31,3 +31,5 @@ export default async function handler(request, response) {
     return response.status(502).json({ error: 'Nie udało się połączyć z Jooble' })
   }
 }
+
+module.exports = handler
