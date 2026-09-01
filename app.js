@@ -124,6 +124,7 @@ function applyJobFilters() {
   })
   
   renderJobsPage()
+  updateStats()
 }
 
 function clearAllJobFilters() {
@@ -134,6 +135,7 @@ function clearAllJobFilters() {
   currentJobPage = 1
   filteredJobs = [...allJobs]
   renderJobsPage()
+  updateStats()
   showNotification('Filtry wyczyszczone', 'info')
 }
 
@@ -225,11 +227,18 @@ function nextJobPage() {
 
 function updateJobsCount() {
   const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
+  const jobsCount = document.getElementById('jobsCount')
+
+  if (filteredJobs.length === 0) {
+    jobsCount.textContent = 'Brak ofert spełniających kryteria'
+    return
+  }
+
   const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE + 1
   const endIdx = Math.min(currentJobPage * JOBS_PER_PAGE, filteredJobs.length)
-  
-  document.getElementById('jobsCount').textContent = 
-    `Wyświetlanie ${startIdx}-${endIdx} z ${filteredJobs.length} ofert`
+  const totalLabel = filteredJobs.length === 1 ? 'oferta' : 'ofert'
+
+  jobsCount.textContent = `Wyświetlanie ${startIdx}-${endIdx} z ${filteredJobs.length} ${totalLabel}`
 }
 
 // ============== SERVICES LOGIC ==============
