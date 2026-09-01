@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobNexus - Znajdź Swoją Pracę</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-ux.css">
+    <link rel="stylesheet" href="styles-mobile.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header & Navigation -->
+        <header id="header">
+            <nav class="navbar">
+                <div class="logo">💼 JobNexus</div>
+                <ul class="nav-menu">
+                    <li><a href="#jobs">Oferty Pracy</a></li>
+                    <li><a href="#favorites">Ulubione</a></li>
+                    <li><a href="#stats">Statystyki</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main">
+            <!-- Search Section -->
+            <section id="search" class="search-section">
+                <h1>Znajdź Swoją Następną Pracę</h1>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 2rem;">Przejrzyj tysiące ofert pracy z najlepszymi firmami</p>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Szukaj pozycji, firmy, lokalizacji..." class="search-input">
+                    <button id="searchBtn" class="search-btn">🔍 Szukaj</button>
+                </div>
+            </section>
+
+            <!-- Filters Section -->
+            <section id="filters" class="filters-section">
+                <div class="filter-group">
+                    <label for="categoryFilter">Kategoria</label>
+                    <select id="categoryFilter" class="filter-input">
+                        <option value="">Wszystkie kategorie</option>
+                        <option value="IT">IT / Programowanie</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="HR">HR / Kadrowe</option>
+                        <option value="Sales">Sprzedaż</option>
+                        <option value="Design">Design</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter">Typ umowy</label>
+                    <select id="typeFilter" class="filter-input">
+                        <option value="">Wszystkie typy</option>
+                        <option value="full-time">Pełny etat</option>
+                        <option value="part-time">Część etatu</option>
+                        <option value="contract">Kontrakt</option>
+                        <option value="freelance">Freelance</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="locationFilter">Lokalizacja</label>
+                    <input type="text" id="locationFilter" placeholder="np. Warszawa" class="filter-input">
+                </div>
+                <button id="clearFilters" class="btn-secondary">🔄 Wyczyść filtry</button>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loadingSpinner" class="loading-container" style="display: none;">
+                <div class="spinner"></div>
+                <p>Ładowanie ofert pracy...</p>
+            </div>
+
+            <!-- Jobs Section - Single Column Layout -->
+            <section id="jobs" class="jobs-section">
+                <div class="jobs-header">
+                    <h2>📋 Dostępne Oferty Pracy</h2>
+                    <span id="jobsCount" class="jobs-count">Ładowanie...</span>
+                </div>
+                <div id="jobsList" class="jobs-list"></div>
+
+                <!-- Pagination -->
+                <div id="pagination" class="pagination-container">
+                    <button id="prevBtn" class="pagination-btn" disabled>
+                        <span>← Poprzednia</span>
+                    </button>
+                    <div id="pageNumbers" class="page-numbers"></div>
+                    <button id="nextBtn" class="pagination-btn">
+                        <span>Następna →</span>
+                    </button>
+                </div>
+                <div id="paginationInfo" class="pagination-info">Strona <span id="currentPage">1</span> z <span id="totalPages">1</span></div>
+            </section>
+
+            <!-- Stats Section -->
+            <section id="stats" class="stats-section">
+                <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2rem; color: #1e293b;">Statystyki Portalu</h2>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalJobsStat">0</span>
+                        <span class="stat-label">Ofert Pracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCompaniesStat">0</span>
+                        <span class="stat-label">Pracodawców</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalViewsStat">1.2M</span>
+                        <span class="stat-label">Przeglądów</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalUsersStat">50K</span>
+                        <span class="stat-label">Aktywnych Użytkowników</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p>&copy; 2024 JobNexus. Wszystkie prawa zastrzeżone.</p>
+            <ul class="footer-links">
+                <li><a href="#">Polityka Prywatności</a></li>
+                <li><a href="#">Warunki Użytkownika</a></li>
+                <li><a href="#">Pomoc i Wsparcie</a></li>
+                <li><a href="#">Kontakt</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js" type="module"></script>
+</body>
+</html>
