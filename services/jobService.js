@@ -1,5 +1,11 @@
 // Job Service - Handle job data loading and display
 
+let lastJobsTotal = 0
+
+export function getLastJobsTotal() {
+  return lastJobsTotal
+}
+
 export async function loadJobs(keywords = 'praca', location = 'Polska') {
   try {
     const params = new URLSearchParams({ keywords, location })
@@ -8,6 +14,7 @@ export async function loadJobs(keywords = 'praca', location = 'Polska') {
     if (response.ok) {
       const data = await response.json()
       const joobleJobs = parseJobsData(data.jobs || data)
+      lastJobsTotal = Number(data.totalCount || data.total || data.count || joobleJobs.length) || joobleJobs.length
       return mergeWithDemoJobs(joobleJobs)
     }
 
