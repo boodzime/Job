@@ -1,19 +1,35 @@
 // Job Service - Handle job data loading and display
 
-export async function loadJobs() {
+export async function loadJobs(keywords = 'praca', location = 'Polska') {
   try {
-    // Try loading from local JSON file first
-    const response = await fetch('./public/ogloszenia/jobs.json')
+    const params = new URLSearchParams({ keywords, location })
+    const response = await fetch(`/api/jobs?${params.toString()}`)
+
     if (response.ok) {
       const data = await response.json()
-      return parseJobsData(data)
+      const joobleJobs = parseJobsData(data.jobs || data)
+      return mergeWithDemoJobs(joobleJobs)
     }
+
+    console.warn('Jooble API error:', response.status)
   } catch (error) {
-    console.log('Local file not found, trying alternative source')
+    console.warn('Nie udało się pobrać ofert z Jooble:', error)
   }
-  
-  // Fallback to demo data
+
   return getDemoJobs()
+}
+
+function mergeWithDemoJobs(joobleJobs) {
+  const demoJobs = getDemoJobs()
+  const seen = new Set()
+  const combined = [...joobleJobs, ...demoJobs]
+
+  return combined.filter(job => {
+    const key = `${job.title.toLowerCase()}|${job.company.toLowerCase()}|${job.location.toLowerCase()}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
 }
 
 // Parse jobs data from API response
