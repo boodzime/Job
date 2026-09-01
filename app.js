@@ -1,6 +1,6 @@
 // Main Application Logic with Job Listings and Pagination
 
-import { loadJobs, displayJobs } from './services/jobService.js'
+import { loadJobs, displayJobs, getLastJobsTotal } from './services/jobService.js'
 import { loadServices, displayServices } from './services/servicesService.js'
 import { showNotification } from './services/notificationService.js'
 
@@ -367,10 +367,11 @@ function updateServicesCount() {
 
 function updateStats() {
   const uniqueCompanies = new Set(allJobs.map(job => job.company)).size
+  const totalJobs = getLastJobsTotal() || allJobs.length
   
-  document.getElementById('totalJobsStat').textContent = allJobs.length
-  document.getElementById('totalServicesStat').textContent = allServices.length
-  document.getElementById('totalCompaniesStat').textContent = uniqueCompanies
+  document.getElementById('totalJobsStat').textContent = totalJobs.toLocaleString('pl-PL')
+  document.getElementById('totalServicesStat').textContent = allServices.length.toLocaleString('pl-PL')
+  document.getElementById('totalCompaniesStat').textContent = uniqueCompanies.toLocaleString('pl-PL')
 }
 
 function showLoadingSpinner(show) {
