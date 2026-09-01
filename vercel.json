@@ -1,8 +1,5 @@
 {
   "cleanUrls": true,
-  "functions": {
-    "api/jobs.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "."
 }
