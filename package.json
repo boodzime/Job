@@ -1,0 +1,11 @@
+{
+  "name": "job-board",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site ready for deployment'"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
