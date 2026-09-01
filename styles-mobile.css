@@ -1,0 +1,400 @@
+/* Mobile-Specific Styles and Optimizations */
+
+@media (max-width: 480px) {
+  :root {
+    font-size: 14px;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  /* Header */
+  #header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+
+  main {
+    margin-top: 80px;
+    padding: 1rem;
+  }
+
+  .navbar {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  .nav-menu {
+    gap: 1rem;
+    margin-right: 0;
+  }
+
+  .nav-menu a {
+    font-size: 0.9rem;
+  }
+
+  /* Search Section */
+  .search-section {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-section h1 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .search-input,
+  .filter-input {
+    min-width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  .search-btn,
+  .btn-apply {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  /* Filters */
+  .filters-section {
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  /* Jobs List */
+  .jobs-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Job Card */
+  .job-card {
+    padding: 1.5rem;
+  }
+
+  .job-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .job-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .btn-favorite {
+    width: 35px;
+    height: 35px;
+    font-size: 1.2rem;
+  }
+
+  .company {
+    font-size: 0.95rem;
+  }
+
+  .location {
+    font-size: 0.85rem;
+  }
+
+  .description {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .job-footer {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .salary {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .btn-apply {
+    margin: 0;
+  }
+
+  /* Footer */
+  #footer {
+    padding: 2rem 1rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  /* Containers */
+  .container {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .container-header {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Info Boxes */
+  .info-box {
+    padding: 1rem;
+    margin: 0.8rem 0;
+  }
+
+  .info-box-title {
+    font-size: 1rem;
+  }
+
+  .info-box-text {
+    font-size: 0.85rem;
+  }
+
+  /* Feature Cards */
+  .feature-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .feature-title {
+    font-size: 1.1rem;
+  }
+
+  .feature-description {
+    font-size: 0.85rem;
+  }
+
+  /* Stats */
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  /* Text Container */
+  .text-container {
+    padding: 1.5rem;
+  }
+
+  .text-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .text-container p {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Alerts */
+  .alert {
+    padding: 1rem;
+    font-size: 0.9rem;
+    gap: 0.8rem;
+  }
+
+  .alert-icon {
+    font-size: 1.2rem;
+    min-width: 25px;
+  }
+
+  .alert-title {
+    font-size: 0.95rem;
+  }
+
+  .alert-message {
+    font-size: 0.85rem;
+  }
+
+  /* Grid Items */
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .grid-item {
+    padding: 1rem;
+  }
+
+  /* Badges */
+  .badge {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    height: 6px;
+    margin: 0.8rem 0;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 30px;
+    height: 30px;
+    border-width: 3px;
+  }
+
+  /* Tooltip - Hide on mobile for better UX */
+  .tooltip::after,
+  .tooltip::before {
+    display: none;
+  }
+
+  /* Touch-friendly buttons */
+  button,
+  .btn-favorite,
+  .btn-apply,
+  .search-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Input touch-friendly */
+  input,
+  textarea,
+  select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  /* Animations - reduce on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    font-size: 15px;
+  }
+
+  .navbar {
+    padding: 1.2rem;
+  }
+
+  .search-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .search-section h1 {
+    font-size: 2rem;
+  }
+
+  .search-container {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .search-input {
+    min-width: 200px;
+  }
+
+  .filters-section {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .filter-group {
+    min-width: 150px;
+    flex: 1;
+  }
+
+  .jobs-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .job-card {
+    padding: 1.5rem;
+  }
+
+  .job-header h3 {
+    font-size: 1.2rem;
+  }
+
+  main {
+    padding: 1.5rem;
+  }
+
+  .container {
+    padding: 1.5rem;
+  }
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Print Styles */
+@media print {
+  #header,
+  #footer,
+  .filters-section,
+  .search-container,
+  .btn-favorite,
+  .search-btn {
+    display: none;
+  }
+
+  .job-card {
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  body {
+    background: white;
+  }
+}
