@@ -60,7 +60,7 @@ function setupEventListeners() {
   // Search for jobs
   document.getElementById('searchBtn').addEventListener('click', performJobSearch)
   document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') performJobSearch()
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) performJobSearch()
   })
   
   // Job filters
@@ -86,28 +86,28 @@ function setupEventListeners() {
 
 // ============== JOBS LOGIC ==============
 
-function performJobSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase()
+async function performJobSearch() {
+  const query = document.getElementById('searchInput').value.trim()
+  const location = document.getElementById('locationFilter').value.trim() || 'Polska'
   currentJobPage = 1
-  
-  if (!query) {
-    filteredJobs = [...allJobs]
-  } else {
-    filteredJobs = allJobs.filter(job => 
-      job.title.toLowerCase().includes(query) ||
-      job.company.toLowerCase().includes(query) ||
-      job.location.toLowerCase().includes(query) ||
-      (job.description && job.description.toLowerCase().includes(query))
-    )
+  showLoadingSpinner(true)
+
+  try {
+    allJobs = await loadJobs(query || 'praca', location)
+    filteredJobs = allJobs.filter(job => {
+      const normalizedQuery = query.toLowerCase()
+      return !normalizedQuery ||
+        job.title.toLowerCase().includes(normalizedQuery) ||
+        job.company.toLowerCase().includes(normalizedQuery) ||
+        job.location.toLowerCase().includes(normalizedQuery) ||
+        (job.description && job.description.toLowerCase().includes(normalizedQuery))
+    })
+    updateStats()
+    renderJobsPage()
+    showNotification(filteredJobs.length ? `Znaleziono ${filteredJobs.length} ofert` : 'Nie znaleziono ofert spełniających kryteria', filteredJobs.length ? 'success' : 'info')
+  } finally {
+    showLoadingSpinner(false)
   }
-  
-  if (filteredJobs.length === 0) {
-    showNotification('Nie znaleziono ofert spełniających kryteria', 'info')
-  } else {
-    showNotification(`Znaleziono ${filteredJobs.length} ofert`, 'success')
-  }
-  
-  renderJobsPage()
 }
 
 function applyJobFilters() {
