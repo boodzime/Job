@@ -8,7 +8,7 @@ export async function loadJobs(keywords = 'praca', location = 'Polska') {
     if (response.ok) {
       const data = await response.json()
       const joobleJobs = parseJobsData(data.jobs || data)
-      return mergeWithDemoJobs(joobleJobs)
+      return joobleJobs.length > 0 ? joobleJobs : getDemoJobs()
     }
 
     console.warn('Jooble API error:', response.status)
@@ -46,10 +46,19 @@ function parseJobsData(data) {
       type: job.type || job.job_type || 'full-time',
       category: job.category || job.job_category || 'Inne',
       posted: job.posted_date || job.created_at || new Date().toISOString(),
-      url: job.url || '#'
+      url: safeJobUrl(job.url)
     }))
   }
   return []
+}
+
+function safeJobUrl(value) {
+  try {
+    const url = new URL(value)
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '#'
+  } catch {
+    return '#'
+  }
 }
 
 // Display jobs on page
@@ -74,10 +83,6 @@ export function displayJobs(jobs, containerId = '#jobsList') {
     btn.addEventListener('click', toggleFavorite)
   })
   
-  // Add event listeners to apply buttons
-  container.querySelectorAll('.btn-apply').forEach(btn => {
-    btn.addEventListener('click', handleApply)
-  })
 }
 
 // Create individual job card HTML
@@ -102,16 +107,18 @@ function createJobCard(job, index) {
       <div class="job-meta">
         <span class="job-location">📍 ${escapeHtml(job.location)}</span>
         <span class="job-type badge badge-primary">${type}</span>
-        <span class="job-posted">🕐 ${daysSincePosted}</span>
+          <span class="job-posted">${daysSincePosted}</span>
+          <span class="job-source">Jooble</span>
+
       </div>
       
       <p class="job-description">${truncateText(escapeHtml(job.description), 150)}</p>
       
       <div class="job-footer">
         <div class="job-salary">${salary}</div>
-        <button class="btn-apply" data-job-id="${job.id}" data-job-title="${escapeHtml(job.title)}">
-          ✉️ Aplikuj
-        </button>
+        <a class="btn-apply" href="${escapeHtml(job.url || '#')}" target="_blank" rel="noopener noreferrer">
+          Aplikuj
+        </a>
       </div>
     </div>
   `
@@ -200,14 +207,6 @@ function toggleFavorite(e) {
     }
   }
   localStorage.setItem('favorites', JSON.stringify(favorites))
-}
-
-// Handle apply
-function handleApply(e) {
-  e.preventDefault()
-  const jobTitle = e.currentTarget.dataset.jobTitle
-  alert(`Dziękujemy! Twoja aplikacja do stanowiska "${jobTitle}" została wysłana.`)
-  // Here you would send the application to a server
 }
 
 // Demo jobs data

@@ -37,9 +37,6 @@ async function init() {
     filteredServices = [...allServices]
     showNotification(`Załadowano ${allServices.length} usług i zleceń!`, 'success')
     
-    // Update stats
-    updateStats()
-    
     // Render initial pages
     renderJobsPage()
     renderServicesPage()
@@ -102,8 +99,8 @@ async function performJobSearch() {
         job.location.toLowerCase().includes(normalizedQuery) ||
         (job.description && job.description.toLowerCase().includes(normalizedQuery))
     })
-    updateStats()
-    renderJobsPage()
+  renderJobsPage()
+
     showNotification(filteredJobs.length ? `Znaleziono ${filteredJobs.length} ofert` : 'Nie znaleziono ofert spełniających kryteria', filteredJobs.length ? 'success' : 'info')
   } finally {
     showLoadingSpinner(false)
@@ -135,7 +132,6 @@ function clearAllJobFilters() {
   currentJobPage = 1
   filteredJobs = [...allJobs]
   renderJobsPage()
-  updateStats()
   showNotification('Filtry wyczyszczone', 'info')
 }
 
@@ -146,7 +142,6 @@ function renderJobsPage() {
   
   displayJobs(pageJobs, '#jobsList')
   updateJobPagination()
-  updateJobsCount()
 }
 
 function updateJobPagination() {
@@ -225,22 +220,6 @@ function nextJobPage() {
   }
 }
 
-function updateJobsCount() {
-  const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
-  const jobsCount = document.getElementById('jobsCount')
-
-  if (filteredJobs.length === 0) {
-    jobsCount.textContent = 'Brak ofert spełniających kryteria'
-    return
-  }
-
-  const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE + 1
-  const endIdx = Math.min(currentJobPage * JOBS_PER_PAGE, filteredJobs.length)
-  const totalLabel = filteredJobs.length === 1 ? 'oferta' : 'ofert'
-
-  jobsCount.textContent = `Wyświetlanie ${startIdx}-${endIdx} z ${filteredJobs.length} ${totalLabel}`
-}
-
 // ============== SERVICES LOGIC ==============
 
 function applyServiceFilters() {
@@ -292,7 +271,6 @@ function renderServicesPage() {
   
   displayServices(pageServices, '#servicesList')
   updateServicePagination()
-  updateServicesCount()
 }
 
 function updateServicePagination() {
@@ -363,24 +341,7 @@ function nextServicePage() {
   }
 }
 
-function updateServicesCount() {
-  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE)
-  const startIdx = (currentServicePage - 1) * SERVICES_PER_PAGE + 1
-  const endIdx = Math.min(currentServicePage * SERVICES_PER_PAGE, filteredServices.length)
-  
-  document.getElementById('servicesCount').textContent = 
-    `Wyświetlanie ${startIdx}-${endIdx} z ${filteredServices.length} usług`
-}
-
-// ============== STATS & COMMON ==============
-
-function updateStats() {
-  const uniqueCompanies = new Set(allJobs.map(job => job.company)).size
-  
-  document.getElementById('totalJobsStat').textContent = allJobs.length
-  document.getElementById('totalServicesStat').textContent = allServices.length
-  document.getElementById('totalCompaniesStat').textContent = uniqueCompanies
-}
+// ============== COMMON ==============
 
 function showLoadingSpinner(show) {
   document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none'
