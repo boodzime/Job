@@ -7,5 +7,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "^4.0.75",
+    "ai": "^7.0.93",
+    "pdf-parse": "^2.4.5"
   }
 }

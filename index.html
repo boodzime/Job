@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles-ux.css">
     <link rel="stylesheet" href="styles-mobile.css">
+    <link rel="stylesheet" href="styles-cv.css">
 </head>
 <body>
     <div id="app">
@@ -33,6 +34,23 @@
                     <input type="text" id="searchInput" placeholder="Szukaj pozycji, firmy, lokalizacji..." class="search-input">
                     <button id="searchBtn" class="search-btn">🔍 Szukaj</button>
                 </div>
+            </section>
+
+            <section id="cv-matcher" class="cv-matcher-section" aria-labelledby="cv-title">
+                <div class="cv-copy">
+                    <span class="eyebrow">Inteligentne dopasowanie</span>
+                    <h2 id="cv-title">Znajdź oferty na podstawie swojego CV</h2>
+                    <p>Wklej publiczny link do CV w PDF lub DOC, a AI wyciągnie kluczowe umiejętności i wyszuka pasujące oferty z Jooble.</p>
+                </div>
+                <form id="cvForm" class="cv-form">
+                    <label for="cvUrl">URL do CV</label>
+                    <div class="cv-input-row">
+                        <input id="cvUrl" name="cvUrl" type="url" required placeholder="https://example.com/moje-cv.pdf" autocomplete="url">
+                        <button class="search-btn" type="submit">Analizuj CV</button>
+                    </div>
+                    <p id="cvStatus" class="cv-status" role="status"></p>
+                </form>
+                <div id="cvProfile" class="cv-profile" hidden></div>
             </section>
 
             <!-- Filters Section -->
