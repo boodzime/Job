@@ -179,7 +179,6 @@ function renderJobsPage() {
   
   displayJobs(pageJobs, '#jobsList')
   updateJobPagination()
-  updateJobsCount()
 }
 
 function updateJobPagination() {
@@ -258,15 +257,6 @@ function nextJobPage() {
   }
 }
 
-function updateJobsCount() {
-  const totalPages = Math.ceil(filteredJobs.length / JOBS_PER_PAGE)
-  const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE + 1
-  const endIdx = Math.min(currentJobPage * JOBS_PER_PAGE, filteredJobs.length)
-  
-  document.getElementById('jobsCount').textContent = 
-    `Wyświetlanie ${startIdx}-${endIdx} z ${filteredJobs.length} ofert`
-}
-
 // ============== SERVICES LOGIC ==============
 
 function applyServiceFilters() {
@@ -318,7 +308,6 @@ function renderServicesPage() {
   
   displayServices(pageServices, '#servicesList')
   updateServicePagination()
-  updateServicesCount()
 }
 
 function updateServicePagination() {
@@ -387,15 +376,6 @@ function nextServicePage() {
     renderServicesPage()
     document.getElementById('services').scrollIntoView({ behavior: 'smooth' })
   }
-}
-
-function updateServicesCount() {
-  const totalPages = Math.ceil(filteredServices.length / SERVICES_PER_PAGE)
-  const startIdx = (currentServicePage - 1) * SERVICES_PER_PAGE + 1
-  const endIdx = Math.min(currentServicePage * SERVICES_PER_PAGE, filteredServices.length)
-  
-  document.getElementById('servicesCount').textContent = 
-    `Wyświetlanie ${startIdx}-${endIdx} z ${filteredServices.length} usług`
 }
 
 // ============== STATS & COMMON ==============
