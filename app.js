@@ -140,7 +140,7 @@ function clearAllJobFilters() {
 function renderJobsPage() {
   const startIdx = (currentJobPage - 1) * JOBS_PER_PAGE
   const endIdx = startIdx + JOBS_PER_PAGE
-  const pageJobs = filteredJobs.slice(startIdx, endIdx)
+  const pageJobs = getLastJobsTotal() > filteredJobs.length ? filteredJobs : filteredJobs.slice(startIdx, endIdx)
   
   displayJobs(pageJobs, '#jobsList')
   updateJobPagination()
