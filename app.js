@@ -57,6 +57,9 @@ async function init() {
 
 // Setup event listeners
 function setupEventListeners() {
+  // CV analysis and personalized Jooble search
+  document.getElementById('cvForm').addEventListener('submit', analyzeCv)
+
   // Search for jobs
   document.getElementById('searchBtn').addEventListener('click', performJobSearch)
   document.getElementById('searchInput').addEventListener('keypress', (e) => {
@@ -82,6 +85,38 @@ function setupEventListeners() {
   // Services pagination
   document.getElementById('servicesPrevBtn').addEventListener('click', previousServicePage)
   document.getElementById('servicesNextBtn').addEventListener('click', nextServicePage)
+}
+
+// ============== CV MATCHING ==============
+
+async function analyzeCv(event) {
+  event.preventDefault()
+  const url = document.getElementById('cvUrl').value.trim()
+  const status = document.getElementById('cvStatus')
+  const profileCard = document.getElementById('cvProfile')
+  status.textContent = 'Analizuję CV i szukam dopasowanych ofert...'
+  status.className = 'cv-status is-loading'
+  try {
+    const response = await fetch('/api/analyze-cv', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) })
+    const data = await response.json()
+    if (!response.ok) throw new Error(data.error || 'Nie udało się przeanalizować CV')
+    const profile = data.profile
+    profileCard.hidden = false
+    profileCard.innerHTML = `<strong>Profil dopasowania</strong><p>${profile.summary}</p><div class="cv-tags">${profile.skills.map(skill => `<span>${skill}</span>`).join('')}</div><small>Role: ${profile.targetRoles.join(', ')} · Lokalizacja: ${profile.location}</small>`
+    const query = profile.targetRoles.slice(0, 3).join(' ')
+    document.getElementById('searchInput').value = query
+    document.getElementById('locationFilter').value = profile.location
+    currentJobPage = 1
+    allJobs = await loadJobs(query, profile.location, 1)
+    filteredJobs = [...allJobs]
+    updateStats()
+    renderJobsPage()
+    status.textContent = `Gotowe. Wyświetlam oferty dla: ${query}.`
+    status.className = 'cv-status is-success'
+  } catch (error) {
+    status.textContent = error.message
+    status.className = 'cv-status is-error'
+  }
 }
 
 // ============== JOBS LOGIC ==============
