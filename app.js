@@ -138,7 +138,6 @@ function applyJobFilters() {
   })
   
   renderJobsPage()
-  updateStats()
 }
 
 function clearAllJobFilters() {
