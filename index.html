@@ -29,39 +29,22 @@
                 <h1>Znajdź Swoją Następną Pracę</h1>
                 <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 2rem;">Przejrzyj tysiące ofert pracy i usług z najlepszymi firmami</p>
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Szukaj pozycji, firmy, lokalizacji..." class="search-input">
-                    <button id="searchBtn" class="search-btn">🔍 Szukaj</button>
+                    <input type="text" id="searchInput" placeholder="Stanowisko, firma lub słowo kluczowe" class="search-input">
+                    <button id="searchBtn" class="search-btn">Szukaj ofert</button>
+                    <button id="advancedSearchBtn" class="settings-btn" type="button" aria-expanded="false" aria-controls="filters">⚙️<span class="sr-only">Otwórz ustawienia wyszukiwania</span></button>
                 </div>
             </section>
 
-            <!-- Filters Section -->
-            <section id="filters" class="filters-section">
-                <div class="filter-group">
-                    <label for="categoryFilter">Kategoria</label>
-                    <select id="categoryFilter" class="filter-input">
-                        <option value="">Wszystkie kategorie</option>
-                        <option value="IT">IT / Programowanie</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="HR">HR / Kadrowe</option>
-                        <option value="Sales">Sprzedaż</option>
-                        <option value="Design">Design</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="typeFilter">Typ umowy</label>
-                    <select id="typeFilter" class="filter-input">
-                        <option value="">Wszystkie typy</option>
-                        <option value="full-time">Pełny etat</option>
-                        <option value="part-time">Część etatu</option>
-                        <option value="contract">Kontrakt</option>
-                        <option value="freelance">Freelance</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="locationFilter">Lokalizacja</label>
-                    <input type="text" id="locationFilter" placeholder="np. Warszawa" class="filter-input">
-                </div>
-                <button id="clearFilters" class="btn-secondary">🔄 Wyczyść filtry</button>
+            <section id="filters" class="filters-section advanced-filters" hidden>
+                <div class="filter-group"><label for="locationFilter">Lokalizacja</label><input type="text" id="locationFilter" placeholder="np. Warszawa" class="filter-input"></div>
+                <div class="filter-group"><label for="radiusFilter">Promień</label><select id="radiusFilter" class="filter-input"><option value="">Dowolny</option><option value="5">5 km</option><option value="25">25 km</option><option value="50">50 km</option><option value="100">100 km</option></select></div>
+                <div class="filter-group"><label for="categoryFilter">Kategoria</label><select id="categoryFilter" class="filter-input"><option value="">Wszystkie kategorie</option><option value="IT">IT / Programowanie</option><option value="Marketing">Marketing</option><option value="HR">HR / Kadrowe</option><option value="Sales">Sprzedaż</option><option value="Design">Design</option></select></div>
+                <div class="filter-group"><label for="typeFilter">Typ umowy</label><select id="typeFilter" class="filter-input"><option value="">Wszystkie typy</option><option value="full-time">Pełny etat</option><option value="part-time">Część etatu</option><option value="contract">Kontrakt</option><option value="freelance">Freelance</option></select></div>
+                <div class="filter-group"><label for="workModeFilter">Tryb pracy</label><select id="workModeFilter" class="filter-input"><option value="">Każdy tryb</option><option value="remote">Zdalna</option><option value="hybrid">Hybrydowa</option><option value="onsite">Stacjonarna</option></select></div>
+                <div class="filter-group"><label for="salaryFilter">Minimalne wynagrodzenie</label><input type="number" min="0" step="500" id="salaryFilter" placeholder="np. 8000" class="filter-input"></div>
+                <div class="filter-group"><label for="dateFilter">Opublikowano</label><select id="dateFilter" class="filter-input"><option value="">Dowolna data</option><option value="1">Ostatnie 24 godziny</option><option value="3">Ostatnie 3 dni</option><option value="7">Ostatni tydzień</option><option value="30">Ostatni miesiąc</option></select></div>
+                <div class="filter-group"><label for="sortFilter">Sortowanie</label><select id="sortFilter" class="filter-input"><option value="date">Najnowsze</option><option value="salary">Wynagrodzenie</option><option value="relevance">Trafność</option></select></div>
+                <div class="filter-actions"><button id="clearFilters" class="btn-secondary" type="button">Wyczyść</button><button id="applyAdvancedFilters" class="search-btn" type="button">Zastosuj filtry</button></div>
             </section>
 
             <!-- Loading Indicator -->

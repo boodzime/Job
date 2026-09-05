@@ -56,14 +56,13 @@ async function init() {
 function setupEventListeners() {
   // Search for jobs
   document.getElementById('searchBtn').addEventListener('click', performJobSearch)
+  document.getElementById('advancedSearchBtn').addEventListener('click', toggleAdvancedFilters)
+  document.getElementById('applyAdvancedFilters').addEventListener('click', performJobSearch)
   document.getElementById('searchInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) performJobSearch()
   })
   
   // Job filters
-  document.getElementById('categoryFilter').addEventListener('change', applyJobFilters)
-  document.getElementById('typeFilter').addEventListener('change', applyJobFilters)
-  document.getElementById('locationFilter').addEventListener('change', applyJobFilters)
   document.getElementById('clearFilters').addEventListener('click', clearAllJobFilters)
   
   // Jobs pagination
@@ -90,7 +89,18 @@ async function performJobSearch() {
   showLoadingSpinner(true)
 
   try {
-    allJobs = await loadJobs(query || 'praca', location)
+    const filters = {
+      keywords: query || 'praca',
+      location,
+      category: document.getElementById('categoryFilter').value,
+      workMode: document.getElementById('workModeFilter').value,
+      radius: document.getElementById('radiusFilter').value,
+      salary: document.getElementById('salaryFilter').value,
+      date: document.getElementById('dateFilter').value,
+      sort: document.getElementById('sortFilter').value,
+      page: currentJobPage
+    }
+    allJobs = await loadJobs(filters)
     filteredJobs = allJobs.filter(job => {
       const normalizedQuery = query.toLowerCase()
       return !normalizedQuery ||
@@ -105,6 +115,13 @@ async function performJobSearch() {
   } finally {
     showLoadingSpinner(false)
   }
+}
+
+function toggleAdvancedFilters() {
+  const panel = document.getElementById('filters')
+  const button = document.getElementById('advancedSearchBtn')
+  panel.hidden = !panel.hidden
+  button.setAttribute('aria-expanded', String(!panel.hidden))
 }
 
 function applyJobFilters() {
@@ -129,6 +146,11 @@ function clearAllJobFilters() {
   document.getElementById('categoryFilter').value = ''
   document.getElementById('typeFilter').value = ''
   document.getElementById('locationFilter').value = ''
+  document.getElementById('radiusFilter').value = ''
+  document.getElementById('workModeFilter').value = ''
+  document.getElementById('salaryFilter').value = ''
+  document.getElementById('dateFilter').value = ''
+  document.getElementById('sortFilter').value = 'relevance'
   currentJobPage = 1
   filteredJobs = [...allJobs]
   renderJobsPage()

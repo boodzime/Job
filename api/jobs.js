@@ -11,13 +11,19 @@ async function handler(request, response) {
 
   const keywords = String(request.query?.keywords || 'praca').trim().slice(0, 120)
   const location = String(request.query?.location || 'Polska').trim().slice(0, 120)
-  const page = Math.max(1, Number.parseInt(request.query?.page || '1', 10) || 1)
+  const page = Math.min(100, Math.max(1, Number.parseInt(request.query?.page || '1', 10) || 1))
+  const radius = Math.min(100, Math.max(0, Number.parseInt(request.query?.radius || '0', 10) || 0))
+  const salary = Math.max(0, Number.parseInt(request.query?.salary || '0', 10) || 0)
+  const date = Math.min(30, Math.max(0, Number.parseInt(request.query?.date || '0', 10) || 0))
+  const sort = ['date', 'salary', 'relevance'].includes(request.query?.sort) ? request.query.sort : 'relevance'
+  const category = String(request.query?.category || '').trim().slice(0, 80)
+  const workMode = String(request.query?.workMode || '').trim().slice(0, 40)
 
   try {
     const joobleResponse = await fetch(`https://jooble.org/api/${encodeURIComponent(apiKey)}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keywords, location, page }),
+      body: JSON.stringify({ keywords, location, page, radius, salary, date, sort, category, workMode }),
     })
 
     if (!joobleResponse.ok) {

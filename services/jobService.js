@@ -1,8 +1,9 @@
 // Job Service - Handle job data loading and display
 
-export async function loadJobs(keywords = 'praca', location = 'Polska') {
+export async function loadJobs(filters = {}) {
+  const { keywords = 'praca', location = 'Polska', radius = '', salary = '', date = '', sort = 'relevance', page = 1 } = filters
   try {
-    const params = new URLSearchParams({ keywords, location })
+    const params = new URLSearchParams({ keywords, location, radius, salary, date, sort, page: String(page) })
     const response = await fetch(`/api/jobs?${params.toString()}`)
 
     if (response.ok) {
