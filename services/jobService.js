@@ -6,9 +6,9 @@ export function getLastJobsTotal() {
   return lastJobsTotal
 }
 
-export async function loadJobs(keywords = 'praca', location = 'Polska') {
+export async function loadJobs(keywords = 'praca', location = 'Polska', page = 1) {
   try {
-    const params = new URLSearchParams({ keywords, location })
+    const params = new URLSearchParams({ keywords, location, page: String(page) })
     const response = await fetch(`/api/jobs?${params.toString()}`)
 
     if (response.ok) {
