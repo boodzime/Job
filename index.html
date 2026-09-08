@@ -14,13 +14,16 @@
         <!-- Header & Navigation -->
         <header id="header">
             <nav class="navbar">
-                <div class="logo">💼 JobNexus</div>
+                <div class="logo">JobNexus</div>
                 <ul class="nav-menu">
                     <li><a href="#jobs">Oferty Pracy</a></li>
                     <li><a href="#services">Usługi i Zlecenia</a></li>
                     <li><a href="#favorites">Ulubione</a></li>
-                    <li><a href="#stats">Statystyki</a></li>
                 </ul>
+                <div class="auth-actions" aria-label="Konto użytkownika">
+                    <button class="auth-btn auth-btn-ghost" type="button" data-auth="login">Zaloguj się</button>
+                    <button class="auth-btn" type="button" data-auth="register">Załóż konto</button>
+                </div>
             </nav>
         </header>
 
@@ -36,6 +39,11 @@
                 </div>
             </section>
 
+            <button id="advancedSearchToggle" class="advanced-toggle" type="button" aria-expanded="false" aria-controls="advancedSearchPanel">
+                <span aria-hidden="true">⚙</span> Opcje zaawansowane
+            </button>
+
+            <div id="advancedSearchPanel" class="advanced-search-panel" hidden>
             <section id="cv-matcher" class="cv-matcher-section" aria-labelledby="cv-title">
                 <div class="cv-copy">
                     <span class="eyebrow">Inteligentne dopasowanie</span>
@@ -166,34 +174,26 @@
                 </div>
                 <div id="servicesPaginationInfo" class="pagination-info">Strona <span id="servicesCurrentPage">1</span> z <span id="servicesTotal">1</span></div>
             </section>
-
-            <!-- Stats Section -->
-            <section id="stats" class="stats-section">
-                <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2rem; color: #1e293b;">Statystyki Portalu</h2>
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalJobsStat">0</span>
-                        <span class="stat-label">Ofert Pracy</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalServicesStat">0</span>
-                        <span class="stat-label">Usług i Zleceń</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalCompaniesStat">0</span>
-                        <span class="stat-label">Pracodawców</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalViewsStat">1.2M</span>
-                        <span class="stat-label">Przeglądów</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalUsersStat">50K</span>
-                        <span class="stat-label">Aktywnych Użytkowników</span>
-                    </div>
-                </div>
-            </section>
+            </div>
         </main>
+
+        <div id="authPanel" class="auth-panel" hidden>
+            <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+                <button id="authClose" class="auth-close" type="button" aria-label="Zamknij">×</button>
+                <span class="eyebrow">Bezpieczny dostęp</span>
+                <h2 id="authTitle">Zaloguj się do JobNexus</h2>
+                <p id="authDescription">Zarządzaj zapisanymi ofertami i swoim profilem.</p>
+                <form id="authForm">
+                    <label for="authEmail">Adres e-mail</label>
+                    <input id="authEmail" type="email" required autocomplete="email" placeholder="ty@przyklad.pl">
+                    <label for="authPassword">Hasło</label>
+                    <input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="Minimum 8 znaków">
+                    <button class="search-btn" type="submit">Kontynuuj</button>
+                </form>
+                <p id="authStatus" class="auth-status" role="status"></p>
+                <button id="authModeToggle" class="auth-mode-toggle" type="button">Nie masz konta? Załóż konto</button>
+            </div>
+        </div>
 
         <!-- Footer -->
         <footer id="footer">

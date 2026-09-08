@@ -28,6 +28,20 @@
     gap: 0.5rem;
   }
 
+  .auth-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .auth-btn {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .advanced-toggle {
+    margin-top: -1rem;
+  }
+
   .logo {
     font-size: 1.4rem;
   }

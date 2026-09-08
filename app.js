@@ -28,17 +28,11 @@ async function init() {
     
     if (allJobs.length === 0) {
       showNotification('Nie udało się załadować ofert pracy', 'warning')
-    } else {
-      showNotification(`Załadowano ${allJobs.length} ofert pracy!`, 'success')
     }
     
     // Load services
     allServices = await loadServices()
     filteredServices = [...allServices]
-    showNotification(`Załadowano ${allServices.length} usług i zleceń!`, 'success')
-    
-    // Update stats
-    updateStats()
     
     // Render initial pages
     renderJobsPage()
@@ -57,13 +51,27 @@ async function init() {
 
 // Setup event listeners
 function setupEventListeners() {
+  setupAuthPanel()
+
   // CV analysis and personalized Jooble search
   document.getElementById('cvForm').addEventListener('submit', analyzeCv)
 
   // Search for jobs
   document.getElementById('searchBtn').addEventListener('click', performJobSearch)
-  document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.nativeEvent.isComposing && e.keyCode !== 229) performJobSearch()
+  document.getElementById('searchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) performJobSearch()
+  })
+
+  document.getElementById('advancedSearchToggle').addEventListener('click', () => {
+    const toggle = document.getElementById('advancedSearchToggle')
+    const panel = document.getElementById('advancedSearchPanel')
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true'
+    toggle.setAttribute('aria-expanded', String(!isOpen))
+    panel.hidden = isOpen
+  })
+
+  document.querySelectorAll('[data-auth]').forEach((button) => {
+    button.addEventListener('click', () => openAuthPanel(button.dataset.auth))
   })
   
   // Job filters
@@ -109,7 +117,6 @@ async function analyzeCv(event) {
     currentJobPage = 1
     allJobs = await loadJobs(query, profile.location, 1)
     filteredJobs = [...allJobs]
-    updateStats()
     renderJobsPage()
     status.textContent = `Gotowe. Wyświetlam oferty dla: ${query}.`
     status.className = 'cv-status is-success'
@@ -137,7 +144,6 @@ async function performJobSearch() {
         job.location.toLowerCase().includes(normalizedQuery) ||
         (job.description && job.description.toLowerCase().includes(normalizedQuery))
     })
-    updateStats()
     renderJobsPage()
     showNotification(filteredJobs.length ? `Znaleziono ${filteredJobs.length} ofert` : 'Nie znaleziono ofert spełniających kryteria', filteredJobs.length ? 'success' : 'info')
   } finally {
@@ -378,16 +384,40 @@ function nextServicePage() {
   }
 }
 
-// ============== STATS & COMMON ==============
+// ============== AUTH PANEL ==============
 
-function updateStats() {
-  const uniqueCompanies = new Set(allJobs.map(job => job.company)).size
-  const totalJobs = getLastJobsTotal() || allJobs.length
-  
-  document.getElementById('totalJobsStat').textContent = totalJobs.toLocaleString('pl-PL')
-  document.getElementById('totalServicesStat').textContent = allServices.length.toLocaleString('pl-PL')
-  document.getElementById('totalCompaniesStat').textContent = uniqueCompanies.toLocaleString('pl-PL')
+let authMode = 'login'
+
+function openAuthPanel(mode = 'login') {
+  authMode = mode
+  const panel = document.getElementById('authPanel')
+  const title = document.getElementById('authTitle')
+  const description = document.getElementById('authDescription')
+  const password = document.getElementById('authPassword')
+  const toggle = document.getElementById('authModeToggle')
+  panel.hidden = false
+  title.textContent = mode === 'register' ? 'Załóż konto w JobNexus' : 'Zaloguj się do JobNexus'
+  description.textContent = mode === 'register' ? 'Utwórz konto jako użytkownik lub rekruter.' : 'Zarządzaj zapisanymi ofertami i swoim profilem.'
+  password.autocomplete = mode === 'register' ? 'new-password' : 'current-password'
+  toggle.textContent = mode === 'register' ? 'Masz już konto? Zaloguj się' : 'Nie masz konta? Załóż konto'
+  document.getElementById('authStatus').textContent = ''
+  document.getElementById('authEmail').focus()
 }
+
+function setupAuthPanel() {
+  document.getElementById('authClose').addEventListener('click', () => {
+    document.getElementById('authPanel').hidden = true
+  })
+  document.getElementById('authModeToggle').addEventListener('click', () => {
+    openAuthPanel(authMode === 'login' ? 'register' : 'login')
+  })
+  document.getElementById('authForm').addEventListener('submit', (event) => {
+    event.preventDefault()
+    document.getElementById('authStatus').textContent = 'Panel konta jest gotowy. Po podłączeniu backendu formularz utworzy sesję użytkownika.'
+  })
+}
+
+// ============== COMMON ==============
 
 function showLoadingSpinner(show) {
   document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none'
