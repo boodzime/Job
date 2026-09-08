@@ -168,6 +168,13 @@ body {
 .switch-row { justify-content: flex-start; margin-top: 1rem; }
 .switch-row input { width: 20px; min-height: 20px; }
 
+.cv-builder-pro { background: linear-gradient(135deg, #ffffff 0%, #fffaf0 100%); }
+.dynamic-section { display: grid; gap: 1rem; }
+.dynamic-item { display: grid; gap: .65rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 12px; background: #fff; }
+.ai-write { width: fit-content; min-height: 40px; padding: .55rem .8rem; border: 1px solid #d99a06; border-radius: 8px; background: #fffbeb; color: #92400e; font-weight: 700; cursor: pointer; }
+.btn-danger { min-height: 40px; padding: .55rem .8rem; border: 1px solid #fecaca; border-radius: 8px; background: #fff1f2; color: #b91c1c; font-weight: 700; cursor: pointer; }
+@media print { #header, #footer, .dashboard-tabs, .form-actions, .advanced-toggle, .search-section, .jobs-section, .services-section, .cv-matcher-section { display: none !important; } body { background: white; } .account-dashboard { margin: 0; border: 0; box-shadow: none; } .cv-builder-pro { background: white; } input, textarea { border: 0 !important; padding: 0 !important; } }
+
 @keyframes slideDown {
   from {
     transform: translateY(-100%);
