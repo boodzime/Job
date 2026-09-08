@@ -190,6 +190,14 @@
     font-size: 0.85rem;
   }
 
+  /* Pricing */
+  .pricing-section { margin: 3rem 0; padding: 1rem 0; }
+  .pricing-intro h2 { font-size: 1.8rem; }
+  .pricing-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .pricing-card { min-height: auto; padding: 1.35rem; }
+  .pricing-price { margin-top: 0.5rem; font-size: 2rem; }
+  .payment-note { flex-direction: column; gap: 0.25rem; }
+
   /* Stats */
   .stats-container {
     grid-template-columns: 1fr;
