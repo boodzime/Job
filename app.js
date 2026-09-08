@@ -136,13 +136,14 @@ async function performJobSearch() {
 
   try {
     allJobs = await loadJobs(query || 'praca', location)
+    const normalizedQuery = query.toLocaleLowerCase('pl-PL')
+    const queryTerms = normalizedQuery.split(/\s+/).filter(Boolean)
     filteredJobs = allJobs.filter(job => {
-      const normalizedQuery = query.toLowerCase()
-      return !normalizedQuery ||
-        job.title.toLowerCase().includes(normalizedQuery) ||
-        job.company.toLowerCase().includes(normalizedQuery) ||
-        job.location.toLowerCase().includes(normalizedQuery) ||
-        (job.description && job.description.toLowerCase().includes(normalizedQuery))
+      const searchableText = [job.title, job.company, job.location, job.description, job.category]
+        .filter(Boolean)
+        .join(' ')
+        .toLocaleLowerCase('pl-PL')
+      return queryTerms.every(term => searchableText.includes(term))
     })
     renderJobsPage()
     showNotification(filteredJobs.length ? `Znaleziono ${filteredJobs.length} ofert` : 'Nie znaleziono ofert spełniających kryteria', filteredJobs.length ? 'success' : 'info')
