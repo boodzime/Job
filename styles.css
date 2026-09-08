@@ -118,6 +118,16 @@ body {
 .auth-close { position: absolute; top: 0.75rem; right: 0.9rem; border: 0; background: transparent; font-size: 2rem; color: var(--text-light); cursor: pointer; }
 .auth-mode-toggle { margin-top: 1rem; border: 0; background: transparent; color: var(--primary-color); font-weight: 700; cursor: pointer; }
 .auth-status { margin-top: 1rem; font-size: 0.9rem; }
+.auth-dialog select { min-height: 48px; padding: 0.8rem 1rem; border: 2px solid var(--border-color); border-radius: 10px; background: white; color: var(--text-dark); font-size: 16px; }
+.account-dashboard { max-width: 1200px; margin: 2rem auto; padding: 2rem; border: 1px solid var(--border-color); border-radius: 20px; background: white; box-shadow: var(--shadow-sm); }
+.account-dashboard[hidden] { display: none; }
+.account-dashboard-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.account-dashboard h2 { margin: 0.5rem 0; color: var(--text-dark); }
+.account-dashboard p { color: var(--text-light); }
+.account-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.account-cards article { padding: 1.25rem; border-radius: 14px; background: #f8fafc; }
+.account-cards h3 { margin: 0; color: var(--text-dark); }
+@media (max-width: 640px) { .account-dashboard { margin: 1rem; padding: 1.25rem; } .account-dashboard-header { align-items: flex-start; flex-direction: column; } .account-cards { grid-template-columns: 1fr; } }
 
 @keyframes slideDown {
   from {

@@ -414,7 +414,26 @@ function setupAuthPanel() {
   })
   document.getElementById('authForm').addEventListener('submit', (event) => {
     event.preventDefault()
-    document.getElementById('authStatus').textContent = 'Panel konta jest gotowy. Po podłączeniu backendu formularz utworzy sesję użytkownika.'
+    const email = document.getElementById('authEmail').value.trim()
+    const role = document.getElementById('authRole').value
+    const accountPanel = document.getElementById('accountDashboard')
+    const isRecruiter = role === 'recruiter'
+
+    document.getElementById('authPanel').hidden = true
+    document.getElementById('accountTitle').textContent = isRecruiter ? 'Panel rekrutera' : 'Panel użytkownika'
+    document.getElementById('accountDescription').textContent = isRecruiter
+      ? `Witaj, ${email}. Zarządzaj ofertami pracy i kandydatami.`
+      : `Witaj, ${email}. Zarządzaj profilem i zapisanymi ofertami.`
+    document.getElementById('accountCards').innerHTML = isRecruiter
+      ? '<article><h3>Moje oferty</h3><p>Dodawaj i zarządzaj ogłoszeniami rekrutacyjnymi.</p></article><article><h3>Kandydaci</h3><p>Przeglądaj dopasowane profile kandydatów.</p></article>'
+      : '<article><h3>Zapisane oferty</h3><p>Oferty zapisane do późniejszego przejrzenia.</p></article><article><h3>Mój profil</h3><p>Uzupełnij CV i preferencje zawodowe.</p></article>'
+    accountPanel.hidden = false
+    accountPanel.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    history.replaceState(null, '', `#${isRecruiter ? 'recruiter-panel' : 'user-panel'}`)
+  })
+  document.getElementById('accountLogout').addEventListener('click', () => {
+    document.getElementById('accountDashboard').hidden = true
+    history.replaceState(null, '', window.location.pathname)
   })
 }
 

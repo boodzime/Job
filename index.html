@@ -188,12 +188,29 @@
                     <input id="authEmail" type="email" required autocomplete="email" placeholder="ty@przyklad.pl">
                     <label for="authPassword">Hasło</label>
                     <input id="authPassword" type="password" required minlength="8" autocomplete="current-password" placeholder="Minimum 8 znaków">
+                    <label for="authRole">Panel po zalogowaniu</label>
+                    <select id="authRole" required>
+                        <option value="candidate">Panel użytkownika</option>
+                        <option value="recruiter">Panel rekrutera</option>
+                    </select>
                     <button class="search-btn" type="submit">Kontynuuj</button>
                 </form>
                 <p id="authStatus" class="auth-status" role="status"></p>
                 <button id="authModeToggle" class="auth-mode-toggle" type="button">Nie masz konta? Załóż konto</button>
             </div>
         </div>
+
+        <section id="accountDashboard" class="account-dashboard" hidden aria-labelledby="accountTitle">
+            <div class="account-dashboard-header">
+                <div>
+                    <span class="eyebrow">Panel konta</span>
+                    <h2 id="accountTitle">Panel użytkownika</h2>
+                    <p id="accountDescription">Zarządzaj zapisanymi ofertami i profilem.</p>
+                </div>
+                <button id="accountLogout" class="btn-secondary" type="button">Wyloguj się</button>
+            </div>
+            <div id="accountCards" class="account-cards"></div>
+        </section>
 
         <!-- Footer -->
         <footer id="footer">
