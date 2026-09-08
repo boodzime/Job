@@ -129,6 +129,45 @@ body {
 .account-cards h3 { margin: 0; color: var(--text-dark); }
 @media (max-width: 640px) { .account-dashboard { margin: 1rem; padding: 1.25rem; } .account-dashboard-header { align-items: flex-start; flex-direction: column; } .account-cards { grid-template-columns: 1fr; } }
 
+.dashboard-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1.5rem 0 0; padding-bottom: .75rem; border-bottom: 1px solid var(--border-color); }
+.dashboard-tab { min-height: 44px; padding: .7rem 1rem; border: 0; border-radius: 10px; background: #eef2ff; color: var(--text-light); font-weight: 700; cursor: pointer; }
+.dashboard-tab.is-active, .dashboard-tab:hover { background: var(--primary-color); color: white; }
+.account-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.dashboard-card { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 16px; background: #fff; box-shadow: var(--shadow-sm); }
+.dashboard-card-wide { grid-column: 1 / -1; }
+.dashboard-card h3 { margin: .35rem 0 .65rem; font-size: 1.35rem; }
+.dashboard-card h4 { margin: 0; font-size: 1.05rem; }
+.dashboard-highlight { border-color: rgba(99,102,241,.35); background: linear-gradient(135deg, #eef2ff, #fff); }
+.card-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }
+.cv-completion, .result-count { padding: .35rem .7rem; border-radius: 999px; background: #fef3c7; color: #92400e; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.cv-builder-form, .cv-builder-form label, .dashboard-card label { display: grid; gap: .45rem; }
+.cv-builder-form { gap: 1rem; }
+.cv-builder-form input, .cv-builder-form textarea, .dashboard-card input, .dashboard-card select, .candidate-search input, .candidate-search select { width: 100%; min-height: 48px; padding: .75rem .9rem; border: 2px solid var(--border-color); border-radius: 10px; background: white; color: var(--text-dark); font: inherit; font-size: 16px; }
+.cv-builder-form textarea { resize: vertical; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.cv-builder-section { padding: 1rem; border-radius: 12px; background: #f8fafc; }
+.helper-text { color: var(--text-light); font-size: .85rem; }
+.skills-rating-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .65rem 1rem; }
+.skill-rating, .switch-row, .metric-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.rating-stars { display: flex; gap: .05rem; }
+.skill-star { min-width: 30px; min-height: 36px; padding: 0; border: 0; background: transparent; color: #cbd5e1; font-size: 1.5rem; cursor: pointer; }
+.skill-star.is-selected, .gold-rating { color: #d99a06; }
+.form-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+.form-status { color: var(--success-color) !important; font-weight: 700; }
+.dashboard-list { display: grid; gap: .5rem; padding-left: 1.2rem; color: var(--text-light); }
+.empty-state { padding: 2rem; text-align: center; border: 1px dashed var(--border-color); border-radius: 12px; }
+.candidate-search { display: grid; grid-template-columns: 2fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+.candidate-list { display: grid; gap: .75rem; }
+.candidate-card { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 12px; background: #f8fafc; }
+.candidate-card p { margin: .2rem 0; color: var(--text-light); }
+.candidate-skills { color: var(--primary-color); font-size: .9rem; }
+.candidate-actions { display: grid; justify-items: end; gap: .4rem; }
+.gold-rating { letter-spacing: .1rem; }
+.metric-row { justify-content: flex-start; padding: .6rem 0; border-bottom: 1px solid var(--border-color); }
+.metric-row strong { min-width: 3rem; font-size: 1.6rem; color: var(--primary-color); }
+.switch-row { justify-content: flex-start; margin-top: 1rem; }
+.switch-row input { width: 20px; min-height: 20px; }
+
 @keyframes slideDown {
   from {
     transform: translateY(-100%);
