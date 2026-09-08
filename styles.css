@@ -787,6 +787,58 @@ main {
   animation: fadeIn 0.5s ease-out;
 }
 
+/* Pricing Section */
+.pricing-section {
+  margin: 5rem 0;
+  padding: 3rem 0;
+}
+
+.pricing-intro {
+  max-width: 680px;
+  margin-bottom: 2rem;
+}
+
+.pricing-intro h2 {
+  margin: 0.5rem 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--text-dark);
+}
+
+.pricing-intro p { color: var(--text-light); font-size: 1.05rem; }
+.eyebrow { color: var(--primary-color); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 340px;
+  padding: 1.75rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.pricing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+.pricing-card-featured { border: 2px solid var(--primary-color); box-shadow: 0 12px 28px rgba(99, 102, 241, 0.16); }
+.pricing-badge { align-self: flex-start; padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(99, 102, 241, 0.1); color: var(--primary-color); font-size: 0.75rem; font-weight: 700; }
+.pricing-card h3 { font-size: 1.2rem; margin-top: 0.25rem; }
+.pricing-card p { color: var(--text-light); font-size: 0.92rem; line-height: 1.55; }
+.pricing-price { margin-top: auto; color: var(--text-dark); font-size: 2.25rem; font-weight: 800; letter-spacing: -1px; }
+.pricing-price span { font-size: 1rem; font-weight: 600; letter-spacing: 0; }
+.pricing-period { color: var(--text-light); font-size: 0.85rem; }
+.pricing-btn { width: 100%; padding: 0.85rem 1rem; border: 0; border-radius: 10px; background: var(--primary-color); color: white; font-weight: 700; cursor: pointer; transition: var(--transition); }
+.pricing-btn:hover { background: #4f46e5; transform: translateY(-2px); }
+.payment-note { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 12px; background: #fff7ed; color: #9a3412; font-size: 0.9rem; }
+.payment-note span { color: #c2410c; }
+
 /* Stats Section */
 .stats-section {
   animation: fadeInUp 0.8s ease-out 0.5s backwards;

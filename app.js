@@ -85,6 +85,13 @@ function setupEventListeners() {
   // Services pagination
   document.getElementById('servicesPrevBtn').addEventListener('click', previousServicePage)
   document.getElementById('servicesNextBtn').addEventListener('click', nextServicePage)
+
+  // Monetization: keep checkout intentionally disabled until payment integration is connected
+  document.querySelectorAll('.pricing-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      showNotification('Płatności kartą i BLIK będą dostępne już wkrótce.', 'info')
+    })
+  })
 }
 
 // ============== CV MATCHING ==============
